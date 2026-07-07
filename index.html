@@ -3,78 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniShelf // Vault Matrix</title>
+    <title>OmniShelf // Personal Reading Ledger</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body class="min-h-screen flex flex-col md:flex-row antialiased select-none">
 
-    <!-- Left Utility Dock Layout -->
+    <!-- Left Navigation Sidebar Matrix -->
     <aside class="w-full md:w-64 border-b md:border-b-0 md:border-r border-zinc-900 bg-zinc-950 p-6 flex flex-row md:flex-col justify-between md:justify-start gap-6 shrink-0 z-10">
         <div>
             <div class="flex items-center gap-3 mb-0 md:mb-10">
                 <div class="h-9 w-9 bg-gradient-to-tr from-indigo-600 to-violet-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                    <i data-lucide="layers" class="w-5 h-5 text-white"></i>
+                    <i data-lucide="library" class="w-5 h-5 text-white"></i>
                 </div>
                 <span class="font-bold text-lg tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400">OMNISHELF</span>
             </div>
             
-            <!-- Navigation Matrix Tabs System -->
+            <!-- Tab Group Selection Navigation -->
             <nav class="hidden md:flex flex-col gap-1 mt-4" id="tab-nav-container">
                 <button onclick="switchTab('master')" id="btn-tab-master" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg bg-zinc-900 text-white font-medium text-left transition cursor-pointer">
-                    <i data-lucide="library" class="w-4 h-4"></i>
-                    <span>Master Matrix</span>
+                    <i data-lucide="layers" class="w-4 h-4"></i>
+                    <span>All Items</span>
                 </button>
                 <button onclick="switchTab('reading')" id="btn-tab-reading" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900/50 text-left transition cursor-pointer">
                     <i data-lucide="book-open" class="w-4 h-4"></i>
-                    <span>Active Reading</span>
+                    <span>Currently Reading</span>
                 </button>
                 <button onclick="switchTab('completed')" id="btn-tab-completed" class="tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900/50 text-left transition cursor-pointer">
                     <i data-lucide="check-circle" class="w-4 h-4"></i>
-                    <span>Archive Ledger</span>
+                    <span>Completed Books</span>
                 </button>
-                
-                <div class="h-px bg-zinc-900 my-4"></div>
-                
-                <button onclick="triggerCSVExport()" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-zinc-500 hover:text-white transition cursor-pointer">
-                    <i data-lucide="download" class="w-3.5 h-3.5"></i> Export Ledger (CSV)
-                </button>
-                <label class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-zinc-500 hover:text-white transition cursor-pointer">
-                    <i data-lucide="upload" class="w-3.5 h-3.5"></i> Import Backup
-                    <input type="file" id="csv-import" accept=".csv" class="hidden" onchange="handleCSVImport(event)">
-                </label>
             </nav>
         </div>
     </aside>
 
-    <!-- Main Workspace Frame Container -->
+    <!-- Main Workspace Canvas -->
     <main class="flex-1 p-6 md:p-10 max-w-7xl w-full mx-auto overflow-y-auto">
         <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-                <h1 id="workspace-title" class="text-3xl font-extrabold tracking-tight">Master Matrix</h1>
-                <p id="workspace-desc" class="text-zinc-400 text-sm mt-1">Global collection array engine indexed by structural sorting metadata algorithms.</p>
+                <h1 id="workspace-title" class="text-3xl font-extrabold tracking-tight">All Items</h1>
+                <p id="workspace-desc" class="text-zinc-400 text-sm mt-1">Full internal collection tracking layout frame matrix loops.</p>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="toggleScannerModal()" class="flex items-center gap-2 px-4 py-2.5 bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-200 font-semibold rounded-lg transition cursor-pointer">
-                    <i data-lucide="scan-barcode" class="w-4 h-4"></i> Scan Barcode
-                </button>
-                <button onclick="openAddModal()" class="flex items-center gap-2 px-4 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-semibold rounded-lg transition cursor-pointer">
-                    <i data-lucide="plus" class="w-4 h-4 stroke-[3]"></i> Add Item
-                </button>
-            </div>
+            <button onclick="openAddModal()" class="flex items-center gap-2 px-4 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-semibold rounded-lg transition cursor-pointer">
+                <i data-lucide="plus" class="w-4 h-4 stroke-[3]"></i> Add Book Entry
+            </button>
         </header>
 
-        <!-- Utility Layout Filter Pipeline Configuration Controllers -->
+        <!-- Context Control Filters Pipeline Dashboard -->
         <section class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-3 w-full sm:max-w-md relative">
                 <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-                <input type="text" id="search-input" oninput="renderWorkspace()" placeholder="Filter by Title, Author, Series, Tag..." class="w-full bg-zinc-950 border border-zinc-800 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-indigo-500 placeholder-zinc-600 transition" />
+                <input type="text" id="search-input" oninput="renderWorkspace()" placeholder="Filter collections by title, metadata..." class="w-full bg-zinc-950 border border-zinc-800 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-indigo-500 placeholder-zinc-600 transition" />
             </div>
             
-            <!-- Master tab controls display block explicitly -->
+            <!-- Global Structural Sorting Selection Engine -->
             <div id="master-sorting-controls" class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                <span class="text-xs text-zinc-500 font-mono">Sort Matrix:</span>
+                <span class="text-xs text-zinc-500 font-mono">Sort Library:</span>
                 <select id="sort-engine" onchange="renderWorkspace()" class="bg-zinc-950 border border-zinc-800 text-sm rounded-lg px-3 py-2 text-zinc-300 focus:outline-none focus:border-indigo-500 cursor-pointer">
                     <option value="author">Author Ascending</option>
                     <option value="title">Book Title</option>
@@ -83,39 +67,29 @@
             </div>
         </section>
 
-        <!-- Dynamic Working Board Canvas Grid -->
+        <!-- Grid Container Display Viewport Canvas -->
         <section id="collection-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <!-- Dynamically populated via render engines -->
+            <!-- Populated via script architecture modules loops -->
         </section>
     </main>
 
-    <!-- Master Interactive Data Injection Input Modal Box Frame -->
+    <!-- Multi-Functional Database Modification Data Entry Modal -->
     <div id="item-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
         <div class="bg-zinc-900 border border-zinc-800 w-full max-w-lg rounded-2xl overflow-hidden flex flex-col max-h-[90vh]">
             <header class="p-6 border-b border-zinc-800 flex items-center justify-between">
-                <h2 id="modal-title" class="text-xl font-bold tracking-tight">Index New Artifact</h2>
+                <h2 id="modal-title" class="text-xl font-bold tracking-tight">Index Book Object</h2>
                 <button onclick="closeAddModal()" class="text-zinc-500 hover:text-zinc-300 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
             </header>
             <form id="item-form" onsubmit="saveItem(event)" class="p-6 space-y-4 overflow-y-auto flex-1">
                 <input type="hidden" id="item-id">
                 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">State Configuration</label>
-                        <select id="item-status" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" required>
-                            <option value="OWNED">Master Library (Unread)</option>
-                            <option value="READING">Active Progress Pipeline</option>
-                            <option value="COMPLETED">Archive (Finished Ledger)</option>
-                            <option value="WISHLIST">Wishlist Sync</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Identifier (ISBN)</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="item-identifier" placeholder="Lookup code" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" />
-                            <button type="button" onclick="fetchBookMetadata()" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold rounded-lg transition flex items-center gap-1 cursor-pointer">Fetch</button>
-                        </div>
-                    </div>
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Pipeline Tracking Status</label>
+                    <select id="item-status" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" required>
+                        <option value="OWNED">Library Storage (Unread)</option>
+                        <option value="READING">Currently Reading Pipeline</option>
+                        <option value="COMPLETED">Completed Logs</option>
+                    </select>
                 </div>
 
                 <div class="space-y-3">
@@ -129,66 +103,54 @@
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Book Series Identity</label>
-                            <input type="text" id="item-series" placeholder="e.g. Dune Chronology" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" />
+                            <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Book Series Name</label>
+                            <input type="text" id="item-series" placeholder="e.g. Foundation" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" />
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Series Volume Number</label>
+                            <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Series Index Vol #</label>
                             <input type="number" step="0.1" id="item-series-num" placeholder="e.g. 1" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" />
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Artwork Cover Image Source URL</label>
-                        <input type="url" id="item-cover-url" placeholder="https://domain.space/image.jpg" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" />
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Custom Cover Image Link URL</label>
+                        <input type="url" id="item-cover-url" placeholder="https://domain.com/image.jpg" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" />
                     </div>
                 </div>
 
-                <!-- Custom Progress parameters variables maps nested block logic structure -->
+                <!-- Custom Progress Parameters Variables Maps Structural Boundaries -->
                 <div class="grid grid-cols-2 gap-4 border-t border-zinc-800/60 pt-3">
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Current Page Progression</label>
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Current Page Index</label>
                         <input type="number" id="item-page-curr" value="0" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" />
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Total Page Boundary Length</label>
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Total Page Boundaries</label>
                         <input type="number" id="item-page-total" value="0" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" />
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Rating Appraisal Score (Halves Allowed)</label>
-                    <input type="number" step="0.5" min="0" max="5" id="item-rating" placeholder="5.0" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" />
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Appraisal Rating (Halves Accepted)</label>
+                    <input type="number" step="0.5" min="0" max="5" id="item-rating" placeholder="4.5" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500" />
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Annotations, Reviews & Notes</label>
+                    <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-1">Reading Notes & Annotations Log</label>
                     <textarea id="item-notes" rows="2" class="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:border-indigo-500 resize-none"></textarea>
                 </div>
 
                 <footer class="pt-2 flex items-center justify-end gap-3">
-                    <button type="button" onclick="closeAddModal()" class="px-4 py-2 border border-zinc-800 rounded-lg text-sm text-zinc-400 hover:text-white transition cursor-pointer">Close</button>
-                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-semibold transition cursor-pointer">Commit Ledger</button>
+                    <button type="button" onclick="closeAddModal()" class="px-4 py-2 border border-zinc-800 rounded-lg text-sm text-zinc-400 hover:text-white transition cursor-pointer">Discard</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm font-semibold transition cursor-pointer">Save Index Changes</button>
                 </footer>
             </form>
         </div>
     </div>
 
-    <!-- Scanner Camera Component Viewport Frame -->
-    <div id="scanner-modal" class="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl p-6 flex flex-col gap-4">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-bold tracking-tight">Camera Feed Pipeline</h2>
-                <button onclick="toggleScannerModal()" class="text-zinc-500 hover:text-zinc-300 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
-            <div id="interactive-reader" class="w-full bg-zinc-950 rounded-xl overflow-hidden border border-zinc-800 aspect-video"></div>
-        </div>
-    </div>
-
-    <!-- Storage Execution Engine Control Logic Scripts -->
+    <!-- Storage Core Pipeline Script Execution Array Engines -->
     <script>
         let db;
         let activeTab = 'master';
-        let html5QrcodeScanner;
         
         const dbRequest = indexedDB.open("OmniShelfWorkspaceEngine", 2);
         dbRequest.onupgradeneeded = function(e) {
@@ -206,7 +168,7 @@
         function switchTab(targetTab) {
             activeTab = targetTab;
             
-            // Adjust CSS selection indicators across active elements arrays
+            // Re-render structural button highlight state matrices loops
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.className = "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-900/50 text-left transition cursor-pointer";
             });
@@ -217,27 +179,26 @@
             const sortingControls = document.getElementById('master-sorting-controls');
 
             if (targetTab === 'master') {
-                title.innerText = "Master Matrix";
-                desc.innerText = "Complete internal collection library sorted down via metadata attributes hierarchy metrics loops.";
+                title.innerText = "All Items";
+                desc.innerText = "Full internal collection library array matrix mapping elements loop filters.";
                 sortingControls.classList.remove('hidden');
             } else if (targetTab === 'reading') {
-                title.innerText = "Active Progress Pipelines";
-                desc.innerText = "Real-time parsing trackers monitoring active layout frame page indexes metrics.";
+                title.innerText = "Currently Reading";
+                desc.innerText = "Real-time parsing trackers monitoring current index tracking ratios.";
                 sortingControls.classList.add('hidden');
             } else {
-                title.innerText = "Archive Finished Ledger";
-                desc.innerText = "Completed data logs mapping evaluation scores, fractional ratings, and execution reviews.";
+                title.innerText = "Completed Books";
+                desc.innerText = "Finished logs mapping analytical evaluation review notes and appraisal ratings.";
                 sortingControls.classList.add('hidden');
             }
 
             renderWorkspace();
         }
 
-        // Modals Structural Injections Setup logic
         function openAddModal() {
             document.getElementById('item-form').reset();
             document.getElementById('item-id').value = '';
-            document.getElementById('modal-title').innerText = "Index New Artifact";
+            document.getElementById('modal-title').innerText = "Add Book Entry";
             document.getElementById('item-modal').classList.remove('hidden');
         }
 
@@ -245,39 +206,6 @@
             document.getElementById('item-modal').classList.add('hidden');
         }
 
-        function toggleScannerModal() {
-            const modal = document.getElementById('scanner-modal');
-            if (modal.classList.contains('hidden')) {
-                modal.classList.remove('hidden');
-                html5QrcodeScanner = new Html5Qrcode("interactive-reader");
-                html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 15, qrbox: { width: 260, height: 160 } },
-                    (text) => { toggleScannerModal(); openAddModal(); document.getElementById('item-identifier').value = text; fetchBookMetadata(); },
-                    () => {}
-                ).catch(() => {});
-            } else {
-                modal.classList.add('hidden');
-                if (html5QrcodeScanner) html5QrcodeScanner.stop().then(() => html5QrcodeScanner = null);
-            }
-        }
-
-        // External Registry Metadata Resolver Core Network Thread Logic
-        async function fetchBookMetadata() {
-            const isbn = document.getElementById('item-identifier').value.trim().replace(/[-\s]/g, '');
-            if (!isbn) return;
-            try {
-                const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`).then(r => r.json());
-                if (res.items?.length > 0) {
-                    const info = res.items[0].volumeInfo;
-                    document.getElementById('item-title').value = info.title || '';
-                    document.getElementById('item-creator').value = info.authors ? info.authors.join(', ') : '';
-                    if (info.imageLinks?.thumbnail) {
-                        document.getElementById('item-cover-url').value = info.imageLinks.thumbnail.replace('http://', 'https://');
-                    }
-                }
-            } catch (err) { console.error("Global Index Feed Offline:", err); }
-        }
-
-        // Engine Persistence Mapping Operations
         function saveItem(e) {
             e.preventDefault();
             const id = document.getElementById('item-id').value || crypto.randomUUID();
@@ -289,7 +217,6 @@
                 series: document.getElementById('item-series').value || '',
                 seriesNum: parseFloat(document.getElementById('item-series-num').value) || 0,
                 coverUrl: document.getElementById('item-cover-url').value || '',
-                identifier: document.getElementById('item-identifier').value || '',
                 pageCurr: parseInt(document.getElementById('item-page-curr').value) || 0,
                 pageTotal: parseInt(document.getElementById('item-page-total').value) || 0,
                 rating: parseFloat(document.getElementById('item-rating').value) || 0,
@@ -307,8 +234,10 @@
             const store = tx.objectStore("items");
             store.get(id).onsuccess = (e) => {
                 const item = e.target.result;
-                item.pageCurr = parseInt(current) || 0;
+                item.pageCurr = Math.max(0, parseInt(current) || 0);
                 store.put(item);
+                // Trigger a UI refreshing pipeline matrix loop directly upon data validation change execution
+                setTimeout(renderWorkspace, 250);
             };
         }
 
@@ -317,7 +246,7 @@
             const store = tx.objectStore("items");
             store.get(id).onsuccess = (e) => {
                 const item = e.target.result;
-                item.rating = parseFloat(score) || 0;
+                item.rating = Math.min(5, Math.max(0, parseFloat(score) || 0));
                 store.put(item);
             };
         }
@@ -327,7 +256,7 @@
             tx.objectStore("items").get(id).onsuccess = (e) => {
                 const item = e.target.result;
                 openAddModal();
-                document.getElementById('modal-title').innerText = "Modify Catalog Matrix Entry";
+                document.getElementById('modal-title').innerText = "Edit Book Metadata";
                 document.getElementById('item-id').value = item.id;
                 document.getElementById('item-status').value = item.status;
                 document.getElementById('item-title').value = item.title;
@@ -335,7 +264,6 @@
                 document.getElementById('item-series').value = item.series || '';
                 document.getElementById('item-series-num').value = item.seriesNum || '';
                 document.getElementById('item-cover-url').value = item.coverUrl || '';
-                document.getElementById('item-identifier').value = item.identifier || '';
                 document.getElementById('item-page-curr').value = item.pageCurr || 0;
                 document.getElementById('item-page-total').value = item.pageTotal || 0;
                 document.getElementById('item-rating').value = item.rating || 0;
@@ -344,14 +272,13 @@
         }
 
         function deleteItem(id) {
-            if (confirm("Purge asset file permanently from memory mapping arrays?")) {
+            if (confirm("Permanently strip book object reference index array from physical hardware cache configuration mapping?")) {
                 const tx = db.transaction("items", "readwrite");
                 tx.objectStore("items").delete(id);
                 tx.oncomplete = () => renderWorkspace();
             }
         }
 
-        // Structural Sorting Processing Logic Loop Matrices
         function renderWorkspace() {
             const tx = db.transaction("items", "readonly");
             tx.objectStore("items").getAll().onsuccess = (e) => {
@@ -360,7 +287,6 @@
                 const grid = document.getElementById('collection-grid');
                 grid.innerHTML = '';
 
-                // Filtering by global input values strings
                 if (search) {
                     items = items.filter(i => 
                         i.title.toLowerCase().includes(search) || 
@@ -369,7 +295,7 @@
                     );
                 }
 
-                // Sorting Matrix Resolution Layer Execution Pipeline
+                // Global Routing Table Logic Parsing Resolution Matrices
                 if (activeTab === 'master') {
                     const sortBy = document.getElementById('sort-engine').value;
                     items.sort((a, b) => {
@@ -385,39 +311,38 @@
                     items = items.filter(i => i.status === 'COMPLETED');
                 }
 
-                // Execution output rendering loops arrays structures configuration
                 items.forEach(item => {
                     const card = document.createElement('div');
                     card.className = "group relative bg-zinc-900 border border-zinc-800/80 rounded-xl overflow-hidden hover:border-zinc-700 transition flex flex-col justify-between";
                     
                     const cover = item.coverUrl 
                         ? `<img src="${item.coverUrl}" class="w-full h-full object-cover" />`
-                        : `<div class="w-full h-full flex items-center justify-center bg-zinc-950 text-zinc-800"><i data-lucide="book-open" class="w-12 h-12 stroke-[1]"></i></div>`;
+                        : `<div class="w-full h-full flex items-center justify-center bg-zinc-950 text-zinc-800"><i data-lucide="book" class="w-12 h-12 stroke-[1]"></i></div>`;
 
-                    // Generate tab-specific functional modules layout matrices injection values inputs
-                    let structuralDashboardUtility = '';
+                    // Dynamic Sub-Interface Module Injections Mapping Framework
+                    let controlDashboardUtility = '';
                     if (activeTab === 'reading') {
                         const numericPct = item.pageTotal ? Math.min(100, Math.round((item.pageCurr / item.pageTotal) * 100)) : 0;
-                        structuralDashboardUtility = `
+                        controlDashboardUtility = `
                             <div class="mt-4 pt-3 border-t border-zinc-800/50 space-y-2">
                                 <div class="flex items-center justify-between text-xs font-mono">
-                                    <span class="text-zinc-500">Progress Vector:</span>
+                                    <span class="text-zinc-500">Progress Tracker:</span>
                                     <div class="flex items-center gap-1">
-                                        <input type="number" value="${item.pageCurr}" onchange="updateInlinePages('${item.id}', this.value)" class="w-12 bg-zinc-950 border border-zinc-800 text-center rounded text-zinc-200 py-0.5 focus:outline-none" />
+                                        <input type="number" value="${item.pageCurr}" onchange="updateInlinePages('${item.id}', this.value)" class="w-14 bg-zinc-950 border border-zinc-800 text-center rounded text-zinc-200 py-0.5 focus:outline-none focus:border-indigo-500" />
                                         <span class="text-zinc-600">/ ${item.pageTotal} pgs</span>
                                     </div>
                                 </div>
-                                <div class="w-full bg-zinc-950 h-1 rounded overflow-hidden"><div class="bg-indigo-500 h-full transition-all" style="width: ${numericPct}%"></div></div>
+                                <div class="w-full bg-zinc-950 h-1.5 rounded-full overflow-hidden"><div class="bg-indigo-500 h-full transition-all duration-300" style="width: ${numericPct}%"></div></div>
                             </div>
                         `;
                     } else if (activeTab === 'completed') {
-                        structuralDashboardUtility = `
-                            <div class="mt-4 pt-3 border-t border-zinc-800/50 space-y-1">
+                        controlDashboardUtility = `
+                            <div class="mt-4 pt-3 border-t border-zinc-800/50 space-y-2">
                                 <div class="flex items-center justify-between text-xs font-mono">
-                                    <span class="text-zinc-500">Appraisal Score:</span>
-                                    <input type="number" step="0.5" min="0" max="5" value="${item.rating || 0}" onchange="updateInlineRating('${item.id}', this.value)" class="w-12 bg-zinc-950 border border-zinc-800 text-center rounded text-amber-400 font-bold py-0.5 focus:outline-none" />
+                                    <span class="text-zinc-500">Score Rating:</span>
+                                    <input type="number" step="0.5" min="0" max="5" value="${item.rating || 0}" onchange="updateInlineRating('${item.id}', this.value)" class="w-12 bg-zinc-950 border border-zinc-800 text-center rounded text-amber-400 font-bold py-0.5 focus:outline-none focus:border-amber-500" />
                                 </div>
-                                ${item.notes ? `<p class="text-xs text-zinc-400 mt-2 italic line-clamp-2">"${escapeHtml(item.notes)}"</p>` : ''}
+                                ${item.notes ? `<p class="text-xs text-zinc-400 mt-1 italic bg-zinc-950/40 p-2 border border-zinc-800/40 rounded line-clamp-3">"${escapeHtml(item.notes)}"</p>` : ''}
                             </div>
                         `;
                     }
@@ -429,7 +354,7 @@
                                 <h3 class="font-bold text-sm text-zinc-200 tracking-wide line-clamp-1">${escapeHtml(item.title)}</h3>
                                 <p class="text-xs text-zinc-500 mt-0.5">${escapeHtml(item.creator)}</p>
                                 ${item.series ? `<div class="mt-2 text-[10px] uppercase font-mono tracking-wider text-indigo-400 bg-indigo-500/5 px-2 py-0.5 rounded border border-indigo-500/10 inline-block">Vol. ${item.seriesNum} // ${escapeHtml(item.series)}</div>` : ''}
-                                ${structuralDashboardUtility}
+                                ${controlDashboardUtility}
                             </div>
                             <div class="mt-4 pt-3 border-t border-zinc-800/20 flex items-center justify-between text-xs">
                                 <span class="text-[10px] font-mono tracking-widest uppercase text-zinc-600">${item.status}</span>
@@ -447,59 +372,6 @@
         }
 
         function escapeHtml(str) { return str ? str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;") : ''; }
-
-        // CSV Import/Export Pipeline Engine Elements Mapping File Array Structures 
-        function triggerCSVExport() {
-            const tx = db.transaction("items", "readonly");
-            tx.objectStore("items").getAll().onsuccess = (e) => {
-                const items = e.target.result;
-                if (!items.length) return alert("Engine memory mapping arrays are clear.");
-                let csv = "data:text/csv;charset=utf-8,id,status,title,creator,series,seriesNum,coverUrl,identifier,pageCurr,pageTotal,rating,notes\n";
-                items.forEach(i => {
-                    csv += `"${i.id}","${i.status}","${i.title.replace(/"/g, '""')}","${i.creator.replace(/"/g, '""')}","${(i.series || '').replace(/"/g, '""')}","${i.seriesNum}","${i.coverUrl}","${i.identifier}","${i.pageCurr}","${i.pageTotal}","${i.rating}","${(i.notes || '').replace(/"/g, '""')}"\n`;
-                });
-                const link = document.createElement("a");
-                link.setAttribute("href", encodeURI(csv));
-                link.setAttribute("download", `omnishelf_matrix_${Date.now()}.csv`);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            };
-        }
-
-        function handleCSVImport(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const lines = evt.target.result.split("\n").slice(1);
-                const tx = db.transaction("items", "readwrite");
-                const store = tx.objectStore("items");
-                lines.forEach(line => {
-                    const parts = line.trim().match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-                    if (!parts || parts.length < 4) return;
-                    const clean = p => p ? p.replace(/^"|"$/g, '').replace(/""/g, '"') : '';
-                    const item = {
-                        id: clean(parts[0]) || crypto.randomUUID(),
-                        status: clean(parts[1]),
-                        title: clean(parts[2]),
-                        creator: clean(parts[3]),
-                        series: clean(parts[4]) || '',
-                        seriesNum: parseFloat(clean(parts[5])) || 0,
-                        coverUrl: clean(parts[6]) || '',
-                        identifier: clean(parts[7]) || '',
-                        pageCurr: parseInt(clean(parts[8])) || 0,
-                        pageTotal: parseInt(clean(parts[9])) || 0,
-                        rating: parseFloat(clean(parts[10])) || 0,
-                        notes: clean(parts[11]) || '',
-                        timestamp: Date.now()
-                    };
-                    store.put(item);
-                });
-                tx.oncomplete = () => { alert("Ledger imported successfully."); renderWorkspace(); };
-            };
-            reader.readAsText(file);
-        }
     </script>
 </body>
 </html>
